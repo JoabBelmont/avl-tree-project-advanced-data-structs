@@ -1,0 +1,4 @@
+# Ignores .o and executable files:
+*.o
+run
+test.*
