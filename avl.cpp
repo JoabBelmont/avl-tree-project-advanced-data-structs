@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include "avl.hpp"
 
 using namespace std;
@@ -23,8 +22,8 @@ Node<T> *avl_tree<T>::rightRotation(Node<T> *p) {
     p->left = u->right;
     u->right = p;
     // recalcular as alturas de p e de u
-    p->height = 1 + max(height(p->left),height(p->right));
-    u->height = 1 + max(height(u->left),height(u->right));
+    p->height = 1 + max(height(p->left), height(p->right));
+    u->height = 1 + max(height(u->left), height(u->right));
     return u;
 }
 
@@ -34,8 +33,8 @@ Node<T> *avl_tree<T>::leftRotation(Node<T> *p) {
     p->right = u->left;
     u->left = p;
     // recalcular as alturas de p e de u
-    p->height = 1 + max(height(p->right),height(p->left));
-    u->height = 1 + max(height(u->left),height(u->right));
+    p->height = 1 + max(height(p->right), height(p->left));
+    u->height = 1 + max(height(u->left), height(u->right));
     return u;
 }
 
@@ -51,18 +50,38 @@ void avl_tree<T>::add(T key) {
 // ela nao for repetida. Claro, tem que deixar AVL novamente
 template <typename T>
 Node<T> *avl_tree<T>::add(Node<T> *p, T key) {
-    if(p == nullptr)
-        return new Node(key);
-    if(key == p->key) 
+    if(p == nullptr) return new Node(key);
+    if(key == p->key) {
+        Node<T> *duplicateNode = new Node<T>(key);
+        p->duplicates.push_back(duplicateNode);
         return p;
-    if(key < p->key)
-        p->left = add(p->left, key);
-    else 
-        p->right = add(p->right, key);
-    
+    }
+    if(key < p->key) p->left = add(p->left, key);
+    else p->right = add(p->right, key);
+
     p = fixup_node(p, key);
 
     return p;
+}
+
+template <typename T>
+std::vector<Node<T>> avl_tree<T>::searchNode(T key) {
+    return searchNode(root, key);
+}
+
+template <typename T>
+std::vector<Node<T>> avl_tree<T>::searchNode(Node<T> *node, T key) {
+    std::vector<Node<T>> result;
+    if (node == nullptr) return result;
+    if (key < node->key) return searchNode(node->left, key);
+    else if (key > node->key) return searchNode(node->right, key);
+    else {
+        result.push_back(*node);
+        for (Node<T>* duplicate : node->duplicates)
+            result.push_back(*duplicate);
+    }
+
+    return result;
 }
 
 template <typename T>
@@ -73,24 +92,22 @@ Node<T> *avl_tree<T>::fixup_node(Node<T> *p, T key) {
     // calcula o balanço do p
     int bal = balance(p);
 
-    if(bal >= -1 && bal <= 1) {
-        return p;
-    }
+    if(bal >= -1 && bal <= 1) return p;
 
-    if(bal < -1 && key < p->left->key) {
-        p = rightRotation(p);
-    }
+    if(bal < -1 && key < p->left->key) p = rightRotation(p);
+
     else if(bal < -1 && key > p->left->key) {
         p->left = leftRotation(p->left);
         p = rightRotation(p);
     }
-    else if(bal > 1 && key > p->right->key) {
-        p = leftRotation(p);
-    }
+
+    else if(bal > 1 && key > p->right->key) p = leftRotation(p);
+
     else if(bal > 1 && key < p->right->key) {
         p->right = rightRotation(p->right);
         p = leftRotation(p);
     }
+
     return p;
 }
 
@@ -180,7 +197,7 @@ Node<T> *avl_tree<T>::remove_successor(Node<T> *root, Node<T> *node) {
 
 template <typename T>
 Node<T> *avl_tree<T>::fixup_deletion(Node<T> *node) {
-    node->height = 1 + max(height(node->left),height(node->right));
+    node->height = 1 + max(height(node->left), height(node->right));
 
     int bal = balance(node);
 
@@ -226,7 +243,7 @@ avl_tree<T>::avl_tree(const avl_tree &t) {
 
 // sobrecarga do operador de atribuicao
 template <typename T>
-avl_tree<T> &avl_tree<T>::operator=(const avl_tree<T> &t)  {
+avl_tree<T> &avl_tree<T>::operator=(const avl_tree &t)  {
     if(this != &t) {
         clear();
         this->root = clone_rec(t.root);
@@ -337,7 +354,7 @@ int height_rec(Node<T> *node) {
 // intercalacao de T1 e T2.
 // Essa funcao tem complexidade O(m+n).
 template <typename T>
-avl_tree<T> *avl_tree<T>::intercala(const avl_tree<T> &t) {
+avl_tree<T> *avl_tree<T>::intercala(const avl_tree &t) {
     vector<T> v1, v2, v;                                 // O(1)
     this->keys_as_vector(v1);                            // O(m)
     t.keys_as_vector(v2);                                // O(n)

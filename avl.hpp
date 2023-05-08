@@ -1,9 +1,8 @@
 #ifndef AVL_HPP
 #define AVL_HPP
-#include <vector>
 #include <string>
 
-#include "pessoa.hpp"
+#include "person.hpp"
 #include "date.hpp"
 #include "node.hpp"
 
@@ -20,6 +19,7 @@ public:
     avl_tree *intercala(const avl_tree &t);
 
     void add(T key);                               // O(lg n)
+    std::vector<Node<T>> searchNode(T key);
     void clear();                                  // O(n)
     void remove(T key);                            // O(lg n)
     void access_keys_inorder(void (*f)(T &key));   // O(n)
@@ -33,6 +33,7 @@ private:
     Node<T> *rightRotation(Node<T> *p);
     Node<T> *leftRotation(Node<T> *p);
     Node<T> *add(Node<T> *p, T key);
+    std::vector<Node<T>> searchNode(Node<T> *node, T key);
     Node<T> *fixup_node(Node<T> *p, T key);
     void bshow(Node<T> *node, std::string heranca) const;
     Node<T> *clear(Node<T> *node);

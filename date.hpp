@@ -1,9 +1,10 @@
 #ifndef DATE_HPP
 #define DATE_HPP
 
-#include <iostream>
 #include <iomanip>
 #include <string>
+#include <sstream>
+#include <vector>
 
 class Date {
     private:
@@ -13,8 +14,25 @@ class Date {
 
     public:
         /* Construtores & Destrutores */
+        Date() = default;
         Date(int month, int day, int year)
             : month(month), day(day), year(year) {}
+
+        Date(std::string date) {
+            std::stringstream ss(date);
+            std::string token;
+            std::vector<std::string> tokens;
+            
+            while (getline(ss, token, '/')) {
+                tokens.push_back(token);
+            }
+
+            this->month = stoi(tokens[0]);
+            this->day = stoi(tokens[1]);
+            this->year = stoi(tokens[2]);
+        }
+
+        ~Date() = default;
 
         /* Getters & Setters */
         int getDay() const { return day; }
@@ -67,7 +85,6 @@ class Date {
                << std::setfill('0') << std::setw(4) << date.getYear();
             return os;
         }
-
 };
 
 #endif
