@@ -5,20 +5,21 @@
 using namespace std;
 
 vector<Person> readCSV(const string& filename);
-avl_tree<int> createTree(vector<Person> people, avl_tree<int> tree);
+avl_tree<NationalID> createTree(vector<Person> people, avl_tree<NationalID> tree);
 avl_tree<string> createTree(vector<Person> people, avl_tree<string> tree);
 avl_tree<Date> createTree(vector<Person> people, avl_tree<Date> tree);
 
 int main() {
-    avl_tree<int> t1;
+    avl_tree<NationalID> nationalIDTree;
     avl_tree<string> givenNameTree;
     avl_tree<Date> birthDateTree;
     vector<Person> people;
     vector<Node<string>> test;
 
-    people = readCSV("test.csv");
+    people = readCSV("data.csv");
     givenNameTree = createTree(people, givenNameTree);
     birthDateTree = createTree(people, birthDateTree);
+    nationalIDTree = createTree(people, nationalIDTree);
 
     for (auto person : people) {
         cout << person << endl;
@@ -26,6 +27,7 @@ int main() {
 
     givenNameTree.bshow();
     birthDateTree.bshow();
+    nationalIDTree.bshow();
 
     // people.push_back(Person(1, "João", "Silva", Date("01/01/2000"), "São Paulo"));
     // people.push_back(Person(2, "João", "Silva", Date("01/01/2000"), "São Paulo"));
@@ -61,6 +63,8 @@ int main() {
     // t1.bshow(); cout << endl;
     // givenNameTree.bshow(); cout << endl;
     // birthDateTree.bshow(); cout << endl;
+
+    return 0;
 }
 
 vector<Person> readCSV(const string& filename) {
@@ -82,7 +86,7 @@ vector<Person> readCSV(const string& filename) {
 
         // Read each field separated by the delimiter (comma in this case)
         getline(ss, field, ',');
-        person.setNationalID(stoi(field));
+        person.setNationalID(field);
 
         getline(ss, field, ',');
         person.setGivenName(field);
@@ -103,9 +107,9 @@ vector<Person> readCSV(const string& filename) {
     return people;
 }
 
-/* Cria a árvore e aponta os nós para objetos no vector pessoa*/
-avl_tree<int> createTree(vector<Person> people, avl_tree<int> tree) {
-    vector<Node<int>> node;
+/* Cria uma árvore de CPF's e aponta os nós para objetos no vector pessoa */
+avl_tree<NationalID> createTree(vector<Person> people, avl_tree<NationalID> tree) {
+    vector<Node<NationalID>> node;
 
     for (auto person : people) {
         tree.add(person.getNationalID());
@@ -118,6 +122,7 @@ avl_tree<int> createTree(vector<Person> people, avl_tree<int> tree) {
     return tree;
 }
 
+/* Cria uma árvore de NOMES e aponta os nós para objetos no vector pessoa */
 avl_tree<string> createTree(vector<Person> people, avl_tree<string> tree) {
     vector<Node<string>> node;
 
@@ -132,6 +137,7 @@ avl_tree<string> createTree(vector<Person> people, avl_tree<string> tree) {
     return tree;
 }
 
+/* Cria uma árvore de DATAS e aponta os nós para objetos no vector pessoa */
 avl_tree<Date> createTree(vector<Person> people, avl_tree<Date> tree) {
     vector<Node<Date>> node;
 

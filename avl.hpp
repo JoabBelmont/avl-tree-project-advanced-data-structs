@@ -4,6 +4,7 @@
 
 #include "person.hpp"
 #include "date.hpp"
+#include "nationalId.hpp"
 #include "node.hpp"
 
 template <typename T>

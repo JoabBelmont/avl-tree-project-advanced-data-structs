@@ -4,7 +4,7 @@ run: main.o avl.o
 main.o: main.cpp avl.hpp
 	g++ -c main.cpp
 
-avl.o: avl.cpp avl.hpp person.hpp date.hpp node.hpp
+avl.o: avl.cpp avl.hpp person.hpp nationalId.hpp date.hpp node.hpp
 	g++ -c avl.cpp
 
 clean:

@@ -4,10 +4,11 @@
 #include <string>
 #include <fstream>
 #include "date.hpp"
+#include "nationalId.hpp"
 
 class Person {
     private:
-        int nationalID;
+        NationalID nationalID;
         std::string givenName;
         std::string surname;
         Date birthDate;
@@ -16,13 +17,14 @@ class Person {
     public:
         /* Construtores & Destrutores */
         Person() = default;
-        Person(int nationalID, std::string givenName, std::string surname, Date birthDate, std::string city)
+        Person(NationalID nationalID, std::string givenName, std::string surname, Date birthDate, std::string city)
             : nationalID(nationalID), givenName(givenName), surname(surname), birthDate(birthDate), city(city) {}
         ~Person() = default;
 
         /* Getters & Setters */
-        int getNationalID() const { return nationalID; }
-        void setNationalID(int nationalID) { this->nationalID = nationalID; }
+        NationalID getNationalID() const { return nationalID; }
+        void setNationalID(NationalID nationalID) { this->nationalID = nationalID; }
+        void setNationalID(std::string nationalID) { this->nationalID = NationalID(nationalID); }
 
         std::string getGivenName() const { return givenName; }
         void setGivenName(std::string givenName) { this->givenName = givenName; }

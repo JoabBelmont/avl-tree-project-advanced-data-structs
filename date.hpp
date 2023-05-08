@@ -27,9 +27,9 @@ class Date {
                 tokens.push_back(token);
             }
 
-            this->month = stoi(tokens[0]);
-            this->day = stoi(tokens[1]);
-            this->year = stoi(tokens[2]);
+            this->month = std::stoi(tokens[0]);
+            this->day = std::stoi(tokens[1]);
+            this->year = std::stoi(tokens[2]);
         }
 
         ~Date() = default;
@@ -80,10 +80,17 @@ class Date {
         bool operator>=(Date date) const { return !operator<(date); }
 
         friend std::ostream& operator<<(std::ostream& os, const Date& date) {
-            os << std::setfill('0') << std::setw(2) << date.getDay() << "/"
-               << std::setfill('0') << std::setw(2) << date.getMonth() << "/"
+            os << std::setfill('0') << std::setw(2) << date.getMonth() << "/"
+               << std::setfill('0') << std::setw(2) << date.getDay() << "/"
                << std::setfill('0') << std::setw(4) << date.getYear();
             return os;
+        }
+
+        friend std::istream& operator>>(std::istream& is, Date& date) {
+            std::string line;
+            getline(is, line);
+            date = Date(line);
+            return is;
         }
 };
 
