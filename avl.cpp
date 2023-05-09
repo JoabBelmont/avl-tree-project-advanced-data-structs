@@ -48,7 +48,7 @@ void avl_tree<T>::add(T key) {
 // função recursiva privada que recebe uma raiz de arvore
 // e uma chave e insere a chave na tree se e somente se 
 // ela nao for repetida. Claro, tem que deixar AVL novamente
-template <typename T>/* Cria uma árvore de CPF's e aponta os nós para objetos no vector pessoa*/
+template <typename T>
 Node<T> *avl_tree<T>::add(Node<T> *p, T key) {
     if(p == nullptr) return new Node(key);
     if(key == p->key) {

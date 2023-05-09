@@ -5,29 +5,44 @@
 using namespace std;
 
 vector<Person> readCSV(const string& filename);
-avl_tree<NationalID> createTree(vector<Person> people, avl_tree<NationalID> tree);
-avl_tree<string> createTree(vector<Person> people, avl_tree<string> tree);
-avl_tree<Date> createTree(vector<Person> people, avl_tree<Date> tree);
+void populateTree(vector<Person> &people, avl_tree<NationalID> &tree);
+void populateTree(vector<Person> &people, avl_tree<string> &tree);
+void populateTree(vector<Person> &people, avl_tree<Date> &tree);
+void searchPersonByNationalID(avl_tree<NationalID> &nationalIDTree, NationalID nationalID);
 
 int main() {
     avl_tree<NationalID> nationalIDTree;
     avl_tree<string> givenNameTree;
     avl_tree<Date> birthDateTree;
     vector<Person> people;
-    vector<Node<string>> test;
+    Person person;
 
-    people = readCSV("data.csv");
-    givenNameTree = createTree(people, givenNameTree);
-    birthDateTree = createTree(people, birthDateTree);
-    nationalIDTree = createTree(people, nationalIDTree);
+    people = readCSV("test.csv");
+    populateTree(people, givenNameTree);
+    populateTree(people, birthDateTree);
+    populateTree(people, nationalIDTree);
 
-    for (auto person : people) {
-        cout << person << endl;
-    }
+    // for (auto person : people) {
+    //     cout << person << endl;
+    // }
 
     givenNameTree.bshow();
     birthDateTree.bshow();
     nationalIDTree.bshow();
+
+    vector<Node<string>> test = givenNameTree.searchNode("Estevan");
+    for (auto node : test) {
+        cout << *node.toPerson << endl;
+    }
+
+    // vector<Node<NationalID>> test = nationalIDTree.searchNode(NationalID("715.379.468-97"));
+    // for (auto node : test) {
+    //     cout << *node.toPerson << endl;
+    // }
+    // 388.624.732-57 -> Kai Cunha: tá me dando Luis Sousa
+    // 992.809.969-32 -> Tiago Gomes: tá me dando erro de segmentação
+    // 518.376.278-35 -> Estevan Azevedo: tá me dando Kai Cunha
+    // 715.379.468-97 -> Luis Sousa: tá me dando Tiago Gomes
 
     // people.push_back(Person(1, "João", "Silva", Date("01/01/2000"), "São Paulo"));
     // people.push_back(Person(2, "João", "Silva", Date("01/01/2000"), "São Paulo"));
@@ -65,6 +80,18 @@ int main() {
     // birthDateTree.bshow(); cout << endl;
 
     return 0;
+}
+
+// Função que busca uma pessoa pelo CPF
+void searchPersonByNationalID(avl_tree<NationalID> &nationalIDTree, NationalID nationalID) {
+    vector<Node<NationalID>> nodes;
+    nodes = nationalIDTree.searchNode(nationalID);
+
+    for (auto node : nodes) {
+        if (node.key == nationalID) {
+            cout << *node.toPerson << endl;
+        }
+    }
 }
 
 vector<Person> readCSV(const string& filename) {
@@ -108,46 +135,34 @@ vector<Person> readCSV(const string& filename) {
 }
 
 /* Cria uma árvore de CPF's e aponta os nós para objetos no vector pessoa */
-avl_tree<NationalID> createTree(vector<Person> people, avl_tree<NationalID> tree) {
-    vector<Node<NationalID>> node;
+void populateTree(vector<Person> &people, avl_tree<NationalID> &tree) {
+    vector<Node<NationalID>> nodeVec;
 
-    for (auto person : people) {
+    for (const auto &person : people) {
         tree.add(person.getNationalID());
-        node = tree.searchNode(person.getNationalID());
-        for (auto n : node) {
-            n.toPerson = &person;
-        }
+        nodeVec = tree.searchNode(person.getNationalID());
+        for (auto &n : nodeVec) n.toPerson = &person;
     }
-
-    return tree;
 }
 
 /* Cria uma árvore de NOMES e aponta os nós para objetos no vector pessoa */
-avl_tree<string> createTree(vector<Person> people, avl_tree<string> tree) {
-    vector<Node<string>> node;
+void populateTree(vector<Person> &people, avl_tree<string> &tree) {
+    vector<Node<string>> nodeVec;
 
-    for (auto person : people) {
+    for (const auto &person : people) {
         tree.add(person.getGivenName());
-        node = tree.searchNode(person.getGivenName());
-        for (auto n : node) {
-            n.toPerson = &person;
-        }
+        nodeVec = tree.searchNode(person.getGivenName());
+        for (auto &n : nodeVec) n.toPerson = &person;
     }
-
-    return tree;
 }
 
 /* Cria uma árvore de DATAS e aponta os nós para objetos no vector pessoa */
-avl_tree<Date> createTree(vector<Person> people, avl_tree<Date> tree) {
-    vector<Node<Date>> node;
+void populateTree(vector<Person> &people, avl_tree<Date> &tree) {
+    vector<Node<Date>> nodeVec;
 
-    for (auto person : people) {
+    for (const auto &person : people) {
         tree.add(person.getBirthDate());
-        node = tree.searchNode(person.getBirthDate());
-        for (auto n : node) {
-            n.toPerson = &person;
-        }
+        nodeVec = tree.searchNode(person.getBirthDate());
+        for (auto &n : nodeVec) n.toPerson = &person;
     }
-
-    return tree;
 }

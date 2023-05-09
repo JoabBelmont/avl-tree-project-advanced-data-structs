@@ -12,11 +12,11 @@ struct Node {
     int height;
     Node *left;
     Node *right;
-    Person *toPerson;
+    const Person *toPerson;
 
     // Construtor
-    Node(T key, Node *left = nullptr, Node *right = nullptr, int height = 1, Person *toPerson = nullptr)
-        : key(key), height(height), left(left), right(right), toPerson(toPerson)
+    Node(T key, Node *left = nullptr, Node *right = nullptr, int height = 1)
+        : key(key), height(height), left(left), right(right)
     {
     }
 };
