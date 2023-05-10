@@ -1,0 +1,33 @@
+\documentclass{article}
+
+\usepackage{minted}
+\usepackage{lineno}
+
+% Configure minted
+\usemintedstyle{friendly}
+\setminted{linenos=true}
+
+\begin{document}
+
+    \section{Code Example}
+        Here is a code snippet with line numbers:
+
+        \begin{minted}{python}
+            def hello_world():
+                print("Hello, world!")
+
+            hello_world()
+        \end{minted}
+
+    \section{Another Code Example}
+        Here is another code snippet:
+
+        \begin{minted}[language=java]{java}
+            public class HelloWorld {
+                public static void main(String[] args) {
+                    System.out.println("Hello, world!");
+                }
+            }
+        \end{minted}
+
+\end{document}
