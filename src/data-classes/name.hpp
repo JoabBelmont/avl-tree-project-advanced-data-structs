@@ -1,30 +1,75 @@
 #ifndef NAME_HPP
 #define NAME_HPP
 
+#include <iostream>
+#include <vector>
 #include <string>
+#include <string_view>
+#include <sstream>
 
 class Name {
     private:
-        std::string givenName;
-        std::string surname;
+        std::string fullName;
 
     public:
         /* Construtores & Destrutores */
         Name() = default;
-        Name(std::string givenName, std::string surname)
-            : givenName(givenName), surname(surname) {}
+        Name(std::string fullName)
+            : fullName(fullName) {}
+
+        Name(std::vector<std::string> names) { this->fullName = names[0] + " " + names[1]; }
+
         ~Name() = default;
 
         /* Getters & Setters */
-        std::string getGivenName() const { return givenName; }
-        void setGivenName(std::string givenName) { this->givenName = givenName; }
+        std::string getFullName() const { return this->fullName; }
+        void setFullName(std::string fullName) { this->fullName = fullName; }
 
-        std::string getSurname() const { return surname; }
-        void setSurname(std::string surname) { this->surname = surname; }
+        std::vector<std::string> splitFullName() const {
+            std::vector<std::string> names;
+            std::stringstream ss(this->fullName);
+            std::string name;
+
+            while (ss >> name) {
+                names.push_back(name);
+            }
+
+            return names;
+        }
+
+        std::string getGivenName() const {
+            std::vector<std::string> names = this->splitFullName();
+            return names[0];
+        }
+
+        std::string getSurname() const {
+            std::vector<std::string> names = this->splitFullName();
+            return names[1];
+        }
 
         /* Métodos */
+        bool operator==(const Name& name) const { 
+            // return (name.getFullName().find(this->getFullName()) == 0);
+            // Checks if "this" is a prefix of "name"
+            return std::string_view(name.getFullName().c_str(), this->getFullName().size()) == this->getFullName();
+        }
+
+        bool operator!=(const std::string& name) const { return !operator==(name); }
+
+        bool operator<(const Name& name) const { 
+            return (this->getFullName() < name.getFullName());
+        }
+
+        bool operator>(const Name& name) const {
+            return (this->getFullName() > name.getFullName());
+        }
+
+        bool operator<=(const Name& name) const { return !operator>(name); }
+
+        bool operator>=(const Name& name) const { return !operator<(name); }
+
         friend std::ostream& operator<<(std::ostream& os, const Name& name) {
-            os << name.getGivenName() << " " << name.getSurname();
+            os << name.getFullName();
             return os;
         }
 };

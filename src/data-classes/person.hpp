@@ -5,20 +5,20 @@
 #include <fstream>
 #include "date.hpp"
 #include "nationalId.hpp"
+#include "name.hpp"
 
 class Person {
     private:
         NationalID nationalID;
-        std::string givenName;
-        std::string surname;
+        Name fullName;
         Date birthDate;
         std::string city;
 
     public:
         /* Construtores & Destrutores */
         Person() = default;
-        Person(NationalID nationalID, std::string givenName, std::string surname, Date birthDate, std::string city)
-            : nationalID(nationalID), givenName(givenName), surname(surname), birthDate(birthDate), city(city) {}
+        Person(NationalID nationalID, Name fullName, Date birthDate, std::string city)
+            : nationalID(nationalID), fullName(fullName), birthDate(birthDate), city(city) {}
         ~Person() = default;
 
         /* Getters & Setters */
@@ -26,11 +26,8 @@ class Person {
         void setNationalID(NationalID nationalID) { this->nationalID = nationalID; }
         void setNationalID(std::string nationalID) { this->nationalID = NationalID(nationalID); }
 
-        std::string getGivenName() const { return givenName; }
-        void setGivenName(std::string givenName) { this->givenName = givenName; }
-
-        std::string getSurname() const { return surname; }
-        void setSurname(std::string surname) { this->surname = surname; }
+        Name getFullName() const { return fullName; }
+        void setFullName(std::vector<std::string> fullName) { this->fullName = Name(fullName); }
 
         Date getBirthDate() const { return birthDate; }
         void setBirthDate(Date birthDate) { this->birthDate = birthDate; }
@@ -42,10 +39,9 @@ class Person {
         /* Métodos */
         friend std::ostream& operator<<(std::ostream& os, const Person& person) {
             os << 
-            "CPF: " << person.getNationalID() << "\n" <<
-            "Nome: " << person.getGivenName() << " " <<
-            person.getSurname() << "\n" <<
-            "Data de Nascimento: " << person.getBirthDate() << "\n" <<
+            "CPF: " << person.getNationalID() << '\n' <<
+            "Nome: " << person.getFullName() << '\n' <<
+            "Data de Nascimento: " << person.getBirthDate() << '\n' <<
             "Cidade: " << person.getCity() << std::endl;
 
             return os;

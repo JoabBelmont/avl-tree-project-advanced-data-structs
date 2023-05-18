@@ -1,7 +1,7 @@
 #ifndef NATIONALID_HPP
 #define NATIONALID_HPP
 
-#include <iostream>
+#include <iomanip>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -96,7 +96,10 @@ public:
     bool operator>=(NationalID id) const { return !operator<(id); }
 
     friend std::ostream& operator<<(std::ostream& os, const NationalID& id) {
-        os << id.getFstCamp() << "." << id.getSndCamp() << "." << id.getTrdCamp() << "-" << id.getLastCamp();
+        os << std::setfill('0') << std::setw(3) << id.getFstCamp() << "."
+        << std::setfill('0') << std::setw(3) << id.getSndCamp() << "."
+        << std::setfill('0') << std::setw(3) << id.getTrdCamp() << "-"
+        << std::setfill('0') << std::setw(2) << id.getLastCamp();
         return os;
     }
 
