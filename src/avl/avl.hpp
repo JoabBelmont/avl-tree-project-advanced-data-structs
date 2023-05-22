@@ -1,3 +1,12 @@
+/**
+ * @file avl.hpp
+ * @authors Atílio Gomes, Joabe Alves (some functions)
+ * @brief File containing the AVL Tree class.
+ * @version 0.1
+ * @date 2023-05-19
+ * 
+ */
+
 #ifndef AVL_HPP
 #define AVL_HPP
 
@@ -38,12 +47,12 @@ public:
         clear();
     }
 
-    void add(T key) {
+    void add(const T &key) {
         root = add(root, key);
     } // O(lg n)
 
-    Node<T> *searchNode(const T &key) {
-        return searchNode(root, key);
+    Node<T> *searchNode(const T &key1, const T &key2 = T()) {
+        return searchNode(root, key1, key2);
     } // O(lg n)
 
     void clear() {
@@ -62,16 +71,46 @@ public:
         inorder_rec(root, v);
     } // O(n)
 
-    void searchPeople(T key) {
-        Node<T> *first { this->searchNode(key) };
-        Node<T> *predecessor { this->predecessor(first) };
-        Node<T> *successor { this->successor(first) };
+    void searchPeople(const T &key1, const T &key2 = T()) {
+        Node<T> *first { nullptr },
+        *predecessor { nullptr }, *successor { nullptr },
+        *foundLeft { nullptr }, *foundRight { nullptr };
 
-        if (first == nullptr) return;
-        else {
-            if (key == predecessor->key || key == successor->key) 
-                searchPeopleRec(first, key);
-            else std::cout << *first->toPerson << '\n';
+        if (key2 == T()) {
+            first = this->searchNode(key1);
+
+            if (first == nullptr) {
+                std::cout << "Chave " << key1 << " nao encontrada\n";
+                return;
+            }
+
+            predecessor = this->maximum(first->left);
+            successor = this->minimum(first->right);
+
+            if ((predecessor && key1 == predecessor->key) ||
+                (successor && key1 == successor->key))
+                searchPeopleRec(first, key1, key2);
+            else {
+                std::cout << *first->toPerson << '\n';
+                showDuplicates(first);
+            }
+        } else {
+            first = this->searchNode(key1, key2);
+
+            if (first == nullptr) {
+                std::cout << "Não existe alguém que satisfaz tal intervalo.\n";
+                return;
+            }
+
+            foundLeft = this->searchNode(first->left, key1, key2);
+            foundRight = this->searchNode(first->right, key1, key2);
+
+            if (foundLeft || foundRight)
+                searchPeopleRec(first, key1, key2);
+            else {
+                std::cout << *first->toPerson << '\n';
+                showDuplicates(first);
+            }
         }
     }
 
@@ -90,6 +129,37 @@ public:
         }
     }
 
+    // T (Person::*)() const getGetter() {
+    //     if (is_same<T, NationalID>::value) {
+    //         return &Person::getNationalID;
+    //     } else if (is_same<T, Name>::value) {
+    //         return &Person::getFullName;
+    //     } else if (is_same<T, Date>::value) {
+    //         return &Person::getBirthDate;
+    //     } else if (is_same<T, std::string>::value) {
+    //         return &Person::getCity;
+    //     } else {
+    //         throw std::runtime_error("Tipo de chave não suportado");
+    //     }
+    // }
+
+    // void populateTree(std::vector<Person> &people) {
+    //     using F = T (Person::*)() const;
+    //     T key;
+    //     Node<T> *node;
+    //     F getter = getGetter();
+
+    //     for (const auto &person : people) {
+    //         key = (person.*getter)();
+    //         this->add(key);
+    //         node = this->searchNode(key);
+    //         while(node->next) {
+    //             node = node->next;
+    //         }
+    //         node->toPerson = &person;
+    //     }
+    // }
+
     Node<T> *minimum(Node<T> *node) {
         if (node == nullptr) return nullptr;
         else {
@@ -105,34 +175,6 @@ public:
             Node<T> *aux = node;
             while (aux->right != nullptr) aux = aux->right;
             return aux;
-        }
-    }
-
-    Node<T> *successor(Node<T> *node) {
-        if (node == nullptr) return nullptr;
-        else {
-            if (node->right != nullptr)
-                return minimum(node->right);
-            Node<T> *p = node->parent;
-            while (p != nullptr && node == p->right) {
-                node = p;
-                p = node->parent;
-            }
-            return p;
-        }
-    }
-
-    Node<T> *predecessor(Node<T> *node) {
-        if (node == nullptr) return nullptr;
-        else if (node->left != nullptr)
-            return maximum(node->left);
-        else {
-            Node<T> *parent = node->parent;
-            while (parent != nullptr && node == parent->left) {
-                node = parent;
-                parent = parent->parent;
-            }
-            return parent;
         }
     }
 
@@ -181,7 +223,7 @@ private:
         return u;
     }
 
-    Node<T> *add(Node<T> *p, T key) {
+    Node<T> *add(Node<T> *p, const T &key) {
         if(p == nullptr) return new Node(key);
         if(key == p->key) {
             Node<T> *q = p;
@@ -197,24 +239,48 @@ private:
         return p;
     }
 
-    Node<T> *searchNode(Node<T> *node, T key) {
-        if (node == nullptr) return node;
-        if (key == node->key) return node;
-        if (key < node->key) return searchNode(node->left, key);
-        return searchNode(node->right, key);
+    Node<T> *searchNode(Node<T> *node, const T &key1, const T &key2 = T()) {
+        if (key2 == T()) {
+            if (node == nullptr) return node;
+            if (key1 == node->key) return node;
+            if (key1 < node->key) return searchNode(node->left, key1);
+            return searchNode(node->right, key1);
+        } else {
+            if (node == nullptr) return node;
+            if (key1 <= node->key && key2 >= node->key) return node;
+            if (key1 < node->key) return searchNode(node->left, key1, key2);
+            return searchNode(node->right, key1, key2);
+        }
+    }
+
+    void showDuplicates(Node<T> *node) {
+        if (node == nullptr) return;
+        if (node->next) {
+            std::cout << *node->toPerson << '\n';
+            showDuplicates(node->next);
+        }
     }
 
     // O(n)
-    void searchPeopleRec(Node<T> *node, T key) {
-        if (node == nullptr) return;
-        else if (key == node->key) {
-            std::cout << *node->toPerson << '\n';
+    void searchPeopleRec(Node<T> *node, const T &key1, const T &key2 = T()) {
+        if (key2 == T()) {
+            if (node == nullptr) return;
+            else if (key1 == node->key) {
+                std::cout << *node->toPerson << '\n';
+            }
+            searchPeopleRec(node->left, key1);
+            searchPeopleRec(node->right, key1);
+        } else {
+            if (node == nullptr) return;
+            else if (key1 <= node->key && key2 >= node->key) {
+                std::cout << *node->toPerson << '\n';
+            }
+            searchPeopleRec(node->left, key1, key2);
+            searchPeopleRec(node->right, key1, key2);
         }
-        searchPeopleRec(node->left, key);
-        searchPeopleRec(node->right, key);
     }
 
-    Node<T> *fixup_node(Node<T> *p, T key) {
+    Node<T> *fixup_node(Node<T> *p, const T &key) {
         // recalcula a altura de p
         p->height = 1 + std::max(height(p->left), height(p->right));
 
@@ -256,16 +322,27 @@ private:
             bshow(node->left, heranca + "l");
     }
 
-    Node<T> *clear(Node<T> *node) {
-        if(node != nullptr) {
+    Node<T> *clear(Node<T>* node) {
+        Node<T> *current { node }, *nextNode { nullptr };
+
+        if (node != nullptr) {
             node->left = clear(node->left);
             node->right = clear(node->right);
-            delete node;
+
+            while (current) {
+                nextNode = current->next;
+                delete current;
+                current = nextNode;
+            }
+
+            node = nullptr;
         }
+
         return nullptr;
     }
 
-    Node<T> *remove(Node<T> *node, T key) {
+
+    Node<T> *remove(Node<T> *node, T &key) {
         if(node == nullptr) // node nao encontrado
             return nullptr; /*L\pauseL*/
         if(key < node->key) 

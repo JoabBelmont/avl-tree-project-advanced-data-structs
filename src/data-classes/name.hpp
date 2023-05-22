@@ -1,3 +1,12 @@
+/**
+ * @file name.hpp
+ * @author Joabe Alves
+ * @brief File containing the Name class
+ * @version 0.1
+ * @date 2023-05-19
+ * 
+ */
+
 #ifndef NAME_HPP
 #define NAME_HPP
 
@@ -49,26 +58,25 @@ class Name {
 
         /* Métodos */
         bool operator==(const Name& name) const { 
-            // return (name.getFullName().find(this->getFullName()) == 0);
             // Checks if "this" is a prefix of "name"
             return std::string_view(name.getFullName().c_str(), this->getFullName().size()) == this->getFullName();
         }
 
-        bool operator!=(const std::string& name) const { return !operator==(name); }
+        bool operator!=(const Name& name) const { return !operator==(name); }
 
-        bool operator<(const Name& name) const { 
-            return (this->getFullName() < name.getFullName());
+        bool operator<(const Name &name) const { 
+            return std::string_view(name.getFullName().c_str(), this->getFullName().size()) < this->getFullName();
         }
 
-        bool operator>(const Name& name) const {
-            return (this->getFullName() > name.getFullName());
+        bool operator>=(const Name &name) const { return !operator<(name); }
+
+        bool operator>(const Name &name) const {
+            return std::string_view(name.getFullName().c_str(), this->getFullName().size()) > this->getFullName();
         }
 
-        bool operator<=(const Name& name) const { return !operator>(name); }
+        bool operator<=(const Name &name) const { return !operator>(name); }
 
-        bool operator>=(const Name& name) const { return !operator<(name); }
-
-        friend std::ostream& operator<<(std::ostream& os, const Name& name) {
+        friend std::ostream &operator<<(std::ostream &os, const Name &name) {
             os << name.getFullName();
             return os;
         }

@@ -1,3 +1,12 @@
+/**
+ * @file node.hpp
+ * @author Atílio Gomes, Joabe Alves (few attributes)
+ * @brief File containing the Node struct
+ * @version 0.1
+ * @date 2023-05-19
+ * 
+ */
+
 #ifndef NODE_HPP
 #define NODE_HPP
 

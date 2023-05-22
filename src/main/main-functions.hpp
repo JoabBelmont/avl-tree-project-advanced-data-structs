@@ -1,55 +1,31 @@
+/**
+ * @file main-functions.hpp
+ * @author Joabe Alves
+ * @brief File containing the main functions of the program
+ * @version 0.1
+ * @date 2023-05-19
+ * 
+ */
+
 #ifndef MAIN_FUNCTIONS_HPP
 #define MAIN_FUNCTIONS_HPP
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
-#include "./avl/avl.hpp"
+#include "../avl/avl.hpp"
 
 using namespace std;
 using NationalIDGetter = NationalID (Person::*)() const;
 using NameGetter = Name (Person::*)() const;
 using DateGetter = Date (Person::*)() const;
+using CityGetter = string (Person::*)() const;
 
 NationalIDGetter getNationalID = &Person::getNationalID;
 NameGetter getFullName = &Person::getFullName;
 DateGetter getBirthDate = &Person::getBirthDate;
-
-/* Declaração */
-void readCSV(const string filename, vector<Person> &people);
-
-/* Implementação */
-// template <typename T>
-// void searchPeople(avl_tree<T> &tree, T key) {
-//     Node<T> *node = tree.searchNode(key);
-//     if (node) {
-//         while (node) {
-//             cout << *node->toPerson << '\n';
-//             node = node->next;
-//         }
-//     } else cout << "Not found" << '\n';
-// }
-
-// template <typename T>
-// void searchPrefix(avl_tree<T> &tree, T key) {
-//     Node<T> *node = tree.searchNode(key);
-//     Node<T> *predecessor = tree.predecessor(node);
-//     Node<T> *successor = tree.successor(node);
-
-//     if (node->left) {
-//         if (key == predecessor->key) {
-//             cout << *predecessor->toPerson << '\n';
-//             searchPrefix(tree, predecessor->key);
-//         }
-//     } else return;
-
-//     if (node->right) {
-//         if (key == successor->key) {
-//             cout << *successor->toPerson << '\n';
-//             searchPrefix(tree, successor->key);
-//         }
-//     } else return;
-// }
+CityGetter getCity = &Person::getCity;
 
 void readCSV(const string filename, vector<Person> &people) {
     vector<string> fields;
@@ -97,6 +73,12 @@ void readCSV(const string filename, vector<Person> &people) {
     }
 
     file.close();
+}
+
+bool isNumber(string str) {
+    for (char c : str)
+        if (!isdigit(c)) return false;
+    return true;
 }
 
 #endif

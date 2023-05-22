@@ -1,3 +1,12 @@
+/**
+ * @file date.hpp
+ * @author Joabe Alves
+ * @brief File containing the Date class
+ * @version 0.1
+ * @date 2023-05-19
+ * 
+ */
+
 #ifndef DATE_HPP
 #define DATE_HPP
 

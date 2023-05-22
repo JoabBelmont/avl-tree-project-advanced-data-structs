@@ -1,8 +1,16 @@
+/**
+ * @file person.hpp
+ * @author Joabe Alves
+ * @brief File containing the Person class
+ * @version 0.1
+ * @date 2023-05-19
+ * 
+ */
+
 #ifndef PERSON_HPP
 #define PERSON_HPP
 
 #include <string>
-#include <fstream>
 #include "date.hpp"
 #include "nationalId.hpp"
 #include "name.hpp"
@@ -46,6 +54,7 @@ class Person {
 
             return os;
         }
+
 };
 
 #endif

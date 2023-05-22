@@ -1,3 +1,12 @@
+/**
+ * @file nationalId.hpp
+ * @author Joabe Alves
+ * @brief File containing the NationalID class
+ * @version 0.1
+ * @date 2023-05-19
+ * 
+ */
+
 #ifndef NATIONALID_HPP
 #define NATIONALID_HPP
 
