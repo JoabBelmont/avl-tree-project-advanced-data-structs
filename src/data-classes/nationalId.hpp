@@ -18,12 +18,14 @@
 
 class NationalID {
 private:
+    /* Attributes */
     int fstCamp;
     int sndCamp;
     int trdCamp;
     int lastCamp;
 
 public:
+    /* Constructors & Destructors */
     NationalID() = default;
     NationalID(int fstCamp, int sndCamp, int trdCamp, int lastCamp)
         : fstCamp(fstCamp), sndCamp(sndCamp), trdCamp(trdCamp), lastCamp(lastCamp) {}
@@ -53,6 +55,7 @@ public:
 
     ~NationalID() = default;
 
+    /* Getters & Setters */
     int getFstCamp() const { return fstCamp; }
     void setFstCamp(int fstCamp) { this->fstCamp = fstCamp; }
 
@@ -65,6 +68,7 @@ public:
     int getLastCamp() const { return lastCamp; }
     void setLastCamp(int lastCamp) { this->lastCamp = lastCamp; }
 
+    /* Methods */
     bool operator==(NationalID id) const { 
         return (fstCamp == id.getFstCamp() &&
                 sndCamp == id.getSndCamp() &&

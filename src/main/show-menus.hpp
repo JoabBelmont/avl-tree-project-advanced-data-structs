@@ -6,74 +6,79 @@
 void showMainMenu() {
     system("clear || cls");
 
-    std::cout << "╒══════════╭──────────────────╮══════════╕" << '\n';
-    std::cout << "╞════[]════│   Data  Viewer   │════[]════╡" << '\n';
-    std::cout << "╞══════════╰──────────────────╯══════════╡" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "│         1 - Consultar por nome         │" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "│         2 - Consultar por CPF          │" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "│         3 - Consultar por data         │" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "│         4 - Opcoes avancadas           │" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "│         0 - Sair                       │" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "│                                        │" << '\n';
-    std::cout << "╘════════════════════════════════════════╛" << '\n';
+    std::cout << "╒═════════╕╭─────────────────╮╒═════════╕" << '\n';
+    std::cout << "╞════[]═══╡╡   Data Viewer   ╞╞═══[]════╡" << '\n';
+    std::cout << "╞═════════╛╰─────────────────╯╘═════════╡" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "│       1 - Search by Name              │" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "│       2 - Search by National ID       │" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "│       3 - Search by Date              │" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "│       4 - Advanced options            │" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "│       0 - Exit                        │" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "│                                       │" << '\n';
+    std::cout << "╘═══════════════════════════════════════╛" << '\n';
     std::cout << '\n';
-    std::cout << "Digite a opcao desejada: ";
+    std::cout << " ╭ Type the desired option \n";
+    std::cout << " ╰|> ";
 }
 
-void showDateSubMenu() {
-    std::cout << "o-------------------------------o" << '\n';
-    std::cout << "|                               |" << '\n';
-    std::cout << "|   1 - Por data única          |" << '\n';
-    std::cout << "|                               |" << '\n';
-    std::cout << "|   2 - Por intervalo de data   |" << '\n';
-    std::cout << "|                               |" << '\n';
-    std::cout << "|   0 - Voltar                  |" << '\n';
-    std::cout << "|                               |" << '\n';
-    std::cout << "o-------------------------------o" << '\n';
+void showDateMenu() {
+    std::cout << "╭──────────────────────────╮" << '\n';
+    std::cout << "│                          │" << '\n';
+    std::cout << "│   1 - By single date     │" << '\n';
+    std::cout << "│                          │" << '\n';
+    std::cout << "│   2 - By date interval   │" << '\n';
+    std::cout << "│                          │" << '\n';
+    std::cout << "│   0 - Back               │" << '\n';
+    std::cout << "│                          │" << '\n';
+    std::cout << "╰──────────────────────────╯" << '\n';
     std::cout << '\n';
+    std::cout << " ╭ Type the desired option \n";
+    std::cout << " ╰|> ";
 }
 
-void showDebugSubMenu() {
+void showDebugMenu() {
     system("clear || cls");
 
-    std::cout << "o----------------------------------o" << '\n';
-    std::cout << "|                                  |" << '\n';
-    std::cout << "|   1 - Mostrar árvores            |" << '\n';
-    std::cout << "|                                  |" << '\n';
-    std::cout << "|   2 - Escolher arquivo           |" << '\n';
-    std::cout << "|                                  |" << '\n';
-    std::cout << "|   3 - Mostrar todas as pessoas   |" << '\n';
-    std::cout << "|                                  |" << '\n';
-    std::cout << "|   0 - Voltar                     |" << '\n';
-    std::cout << "|                                  |" << '\n';
-    std::cout << "o----------------------------------o" << '\n';
+    std::cout << "╭──────────────────────────────────╮" << '\n';
+    std::cout << "│                                  │" << '\n';
+    std::cout << "│   1 - Show trees                 │" << '\n';
+    std::cout << "│                                  │" << '\n';
+    std::cout << "│   2 - Show everyone registered   │" << '\n';
+    std::cout << "│                                  │" << '\n';
+    std::cout << "│   0 - Back                       │" << '\n';
+    std::cout << "│                                  │" << '\n';
+    std::cout << "╰──────────────────────────────────╯" << '\n';
     std::cout << '\n';
+    std::cout << " ╭ Type the desired option \n";
+    std::cout << " ╰|> ";
 }
 
 void showTreeMenu() {
     system("clear || cls");
 
-    std::cout << "o----------------o" << '\n';
-    std::cout << "|                |" << '\n';
-    std::cout << "|   1 - CPF      |" << '\n';
-    std::cout << "|                |" << '\n';
-    std::cout << "|   2 - Nome     |" << '\n';
-    std::cout << "|                |" << '\n';
-    std::cout << "|   3 - Data     |" << '\n';
-    std::cout << "|                |" << '\n';
-    std::cout << "|   4 - Todas    |" << '\n';
-    std::cout << "|                |" << '\n';
-    std::cout << "|   0 - Voltar   |" << '\n';
-    std::cout << "|                |" << '\n';
-    std::cout << "o----------------o" << '\n';
+    std::cout << "╭─────────────────────╮" << '\n';
+    std::cout << "│                     │" << '\n';
+    std::cout << "│   1 - National ID   │" << '\n';
+    std::cout << "│                     │" << '\n';
+    std::cout << "│   2 - Name          │" << '\n';
+    std::cout << "│                     │" << '\n';
+    std::cout << "│   3 - Date          │" << '\n';
+    std::cout << "│                     │" << '\n';
+    std::cout << "│   4 - All           │" << '\n';
+    std::cout << "│                     │" << '\n';
+    std::cout << "│   0 - Back          │" << '\n';
+    std::cout << "│                     │" << '\n';
+    std::cout << "╰─────────────────────╯" << '\n';
     std::cout << '\n'; 
+    std::cout << " ╭ Type the desired option \n";
+    std::cout << " ╰|> ";
 }
 
 #endif

@@ -47,10 +47,10 @@ class Person {
         /* Métodos */
         friend std::ostream& operator<<(std::ostream& os, const Person& person) {
             os << 
-            "CPF: " << person.getNationalID() << '\n' <<
-            "Nome: " << person.getFullName() << '\n' <<
-            "Data de Nascimento: " << person.getBirthDate() << '\n' <<
-            "Cidade: " << person.getCity() << std::endl;
+            "╭ CPF: " << person.getNationalID() << '\n' <<
+            "├ Nome: " << person.getFullName() << '\n' <<
+            "├ Data de Nascimento: " << person.getBirthDate() << '\n' <<
+            "╰ Cidade: " << person.getCity() << std::endl;
 
             return os;
         }

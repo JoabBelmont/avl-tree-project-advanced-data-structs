@@ -47,15 +47,15 @@ public:
         clear();
     }
 
-    void add(const T &key) {
+    void add(const T &key) { //*
         root = add(root, key);
     } // O(lg n)
 
-    Node<T> *searchNode(const T &key1, const T &key2 = T()) {
+    Node<T> *searchNode(const T &key1, const T &key2 = T()) { //*
         return searchNode(root, key1, key2);
     } // O(lg n)
 
-    void clear() {
+    void clear() { //*
         root = clear(root);
     } // O(n)
 
@@ -71,51 +71,65 @@ public:
         inorder_rec(root, v);
     } // O(n)
 
-    void searchPeople(const T &key1, const T &key2 = T()) {
-        Node<T> *first { nullptr },
-        *predecessor { nullptr }, *successor { nullptr },
-        *foundLeft { nullptr }, *foundRight { nullptr };
+    /* Searches people by 3 different methods:
+     * Single, Prefix & Interval search
+     * depending on the number of arguments and of found objects.
+     * This function has O(lg n) complexity in medium
+     * and O(n) in the worst case. */
+    void searchPeople(const T& key1, const T& key2 = T()) { //*
+        Node<T>* first = nullptr;
+        Node<T>* predecessor = nullptr;
+        Node<T>* successor = nullptr;
+        Node<T>* foundLeft = nullptr;
+        Node<T>* foundRight = nullptr;
 
-        if (key2 == T()) {
-            first = this->searchNode(key1);
+        try {
+            if (key2 == T()) { // Single or Prefix search
+                first = this->searchNode(key1); // First node found (O(lg n))
 
-            if (first == nullptr) {
-                std::cout << "Chave " << key1 << " nao encontrada\n";
-                return;
+                if (first == nullptr) {
+                    throw std::runtime_error(" Person not found.");
+                }
+
+                predecessor = this->maximum(first->left); // Predecessor of first (O(lg n))
+                successor = this->minimum(first->right); // Successor of first (O(lg n))
+
+                // If key1 is equal to a predecessor or successor, then it is a muliple search
+                if ((predecessor && key1 == predecessor->key) || (successor && key1 == successor->key)) {
+                    searchPeopleRec(first, key1, key2); // Multiple search (O(n))
+                } else {
+                    std::cout << *first->toPerson << '\n';
+                    showDuplicates(first); // Shows duplicates, if there are any (O(n))
+                }
+                std::cout << " All people have been shown.\n";
+            } else { // Interval search
+                first = this->searchNode(key1, key2); // First node found (O(lg n))
+
+                if (first == nullptr) {
+                    throw std::runtime_error(" There is no person that satisfies that interval.");
+                }
+
+                foundLeft = this->searchNode(first->left, key1, key2); // Found node in the left subtree (O(lg n))
+                foundRight = this->searchNode(first->right, key1, key2); // Found node in the right subtree (O(lg n))
+
+                if (foundLeft || foundRight) { // If there is a node in one of the subtrees that satisfies the interval
+                    searchPeopleRec(first, key1, key2); // Multiple search (O(n))
+                } else {
+                    std::cout << *first->toPerson << '\n';
+                    showDuplicates(first); // Shows duplicates, if there are any (O(n))
+                }
+                std::cout << " All people that satisfy the interval have been shown.\n";
             }
-
-            predecessor = this->maximum(first->left);
-            successor = this->minimum(first->right);
-
-            if ((predecessor && key1 == predecessor->key) ||
-                (successor && key1 == successor->key))
-                searchPeopleRec(first, key1, key2);
-            else {
-                std::cout << *first->toPerson << '\n';
-                showDuplicates(first);
-            }
-        } else {
-            first = this->searchNode(key1, key2);
-
-            if (first == nullptr) {
-                std::cout << "Não existe alguém que satisfaz tal intervalo.\n";
-                return;
-            }
-
-            foundLeft = this->searchNode(first->left, key1, key2);
-            foundRight = this->searchNode(first->right, key1, key2);
-
-            if (foundLeft || foundRight)
-                searchPeopleRec(first, key1, key2);
-            else {
-                std::cout << *first->toPerson << '\n';
-                showDuplicates(first);
-            }
+        } catch (std::runtime_error& e) {
+            std::cout << e.what() << '\n';
+            return;
         }
     }
 
+    /* Adds nodes to the tree and points them
+     * to each corresponding object in the vector. */
     template<typename F>
-    void populateTree(std::vector<Person> &people, F getter) {
+    void populateTree(std::vector<Person> &people, F getter) { //*
         T key;
         Node<T> *node;
         for (const auto &person : people) {
@@ -129,38 +143,7 @@ public:
         }
     }
 
-    // T (Person::*)() const getGetter() {
-    //     if (is_same<T, NationalID>::value) {
-    //         return &Person::getNationalID;
-    //     } else if (is_same<T, Name>::value) {
-    //         return &Person::getFullName;
-    //     } else if (is_same<T, Date>::value) {
-    //         return &Person::getBirthDate;
-    //     } else if (is_same<T, std::string>::value) {
-    //         return &Person::getCity;
-    //     } else {
-    //         throw std::runtime_error("Tipo de chave não suportado");
-    //     }
-    // }
-
-    // void populateTree(std::vector<Person> &people) {
-    //     using F = T (Person::*)() const;
-    //     T key;
-    //     Node<T> *node;
-    //     F getter = getGetter();
-
-    //     for (const auto &person : people) {
-    //         key = (person.*getter)();
-    //         this->add(key);
-    //         node = this->searchNode(key);
-    //         while(node->next) {
-    //             node = node->next;
-    //         }
-    //         node->toPerson = &person;
-    //     }
-    // }
-
-    Node<T> *minimum(Node<T> *node) {
+    Node<T> *minimum(Node<T> *node) { //*
         if (node == nullptr) return nullptr;
         else {
             Node<T> *aux = node;
@@ -169,7 +152,7 @@ public:
         }
     }
 
-    Node<T> *maximum(Node<T> *node) {
+    Node<T> *maximum(Node<T> *node) { //*
         if (node == nullptr) return nullptr;
         else {
             Node<T> *aux = node;
@@ -223,7 +206,7 @@ private:
         return u;
     }
 
-    Node<T> *add(Node<T> *p, const T &key) {
+    Node<T> *add(Node<T> *p, const T &key) { //*
         if(p == nullptr) return new Node(key);
         if(key == p->key) {
             Node<T> *q = p;
@@ -239,7 +222,9 @@ private:
         return p;
     }
 
-    Node<T> *searchNode(Node<T> *node, const T &key1, const T &key2 = T()) {
+    /* Searches node by interval or uniquely,
+     * depending on the number of arguments */
+    Node<T> *searchNode(Node<T> *node, const T &key1, const T &key2 = T()) { //*
         if (key2 == T()) {
             if (node == nullptr) return node;
             if (key1 == node->key) return node;
@@ -253,7 +238,7 @@ private:
         }
     }
 
-    void showDuplicates(Node<T> *node) {
+    void showDuplicates(Node<T> *node) { //*
         if (node == nullptr) return;
         if (node->next) {
             std::cout << *node->toPerson << '\n';
@@ -261,8 +246,10 @@ private:
         }
     }
 
-    // O(n)
-    void searchPeopleRec(Node<T> *node, const T &key1, const T &key2 = T()) {
+    /* Searches people recursively by interval or uniquely,
+     * depending on the number of arguments.
+     * This function traverses a whole subtree, so its O(n). */
+    void searchPeopleRec(Node<T> *node, const T &key1, const T &key2 = T()) { //*
         if (key2 == T()) {
             if (node == nullptr) return;
             else if (key1 == node->key) {
@@ -312,7 +299,7 @@ private:
         for(int i = 0; i < (int) heranca.size() - 1; i++)
             std::cout << (heranca[i] != heranca[i + 1] ? "│   " : "    ");
         if(heranca != "")
-            std::cout << (heranca.back() == 'r' ? "┌───" : "└───");
+            std::cout << (heranca.back() == 'r' ? "╭───" : "╰───");
         if(node == nullptr){
             std::cout << "#" << std::endl;
             return;
@@ -322,7 +309,8 @@ private:
             bshow(node->left, heranca + "l");
     }
 
-    Node<T> *clear(Node<T>* node) {
+    /* Clears a subtree, including duplicate nodes */
+    Node<T> *clear(Node<T>* node) { //*
         Node<T> *current { node }, *nextNode { nullptr };
 
         if (node != nullptr) {

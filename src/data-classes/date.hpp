@@ -17,12 +17,13 @@
 
 class Date {
     private:
+        /* Attributes */
         int day;
         int month;
         int year;
 
     public:
-        /* Construtores & Destrutores */
+        /* Constructors & Destructors */
         Date() = default;
         Date(int month, int day, int year)
             : month(month), day(day), year(year) {}
@@ -53,7 +54,7 @@ class Date {
         int getYear() const { return year; }
         void setYear(int year) { this->year = year; }
 
-        /* Métodos */
+        /* Methods */
         bool operator==(Date date) const { 
             return (day == date.getDay() &&
                     month == date.getMonth() &&
@@ -89,8 +90,8 @@ class Date {
         bool operator>=(Date date) const { return !operator<(date); }
 
         friend std::ostream& operator<<(std::ostream& os, const Date& date) {
-            os << std::setfill('0') << std::setw(2) << date.getMonth() << "/"
-               << std::setfill('0') << std::setw(2) << date.getDay() << "/"
+            os << std::setfill('0') << std::setw(2) << date.getDay() << '/'
+               << std::setfill('0') << std::setw(2) << date.getMonth() << '/'
                << std::setfill('0') << std::setw(4) << date.getYear();
             return os;
         }
@@ -98,8 +99,35 @@ class Date {
         friend std::istream& operator>>(std::istream& is, Date& date) {
             std::string line;
             getline(is, line);
+
             date = Date(line);
             return is;
+        }
+
+        bool isLeapYear() {
+            if (year % 4 == 0 && year % 100 != 0)
+                return true;
+            else if (year % 400 == 0)
+                return true;
+            else
+                return false;
+        }
+
+        bool isValid() {
+            if (month < 1 || month > 12)
+                return false;
+            else if (day < 1 || day > 31)
+                return false;
+            else if (month == 2 && day > 29)
+                return false;
+            else if (month == 2 && day == 29 && !isLeapYear())
+                return false;
+            else if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
+                return false;
+            else if (*this == Date())
+                return false;
+            else
+                return true;
         }
 };
 

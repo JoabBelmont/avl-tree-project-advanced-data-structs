@@ -18,10 +18,11 @@
 
 class Name {
     private:
+        /* Attributes */
         std::string fullName;
 
     public:
-        /* Construtores & Destrutores */
+        /* Constructors & Destructors */
         Name() = default;
         Name(std::string fullName)
             : fullName(fullName) {}
@@ -56,7 +57,7 @@ class Name {
             return names[1];
         }
 
-        /* Métodos */
+        /* Methods */
         bool operator==(const Name& name) const { 
             // Checks if "this" is a prefix of "name"
             return std::string_view(name.getFullName().c_str(), this->getFullName().size()) == this->getFullName();

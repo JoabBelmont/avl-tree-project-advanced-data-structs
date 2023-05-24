@@ -14,18 +14,17 @@
 
 template <typename T>
 struct Node {
-    // atributos
+    /* Attributes */
     T key;
     int height;
     Node *left;
     Node *right;
 
-    // Atributos extras
-    Node *parent;
-    Node *next {nullptr};
-    const Person *toPerson {nullptr};
+    /* Extra attributes */
+    Node *next {nullptr}; // Handles duplicate keys
+    const Person *toPerson {nullptr}; // Pointer to the person in the database
 
-    // Construtor
+    /* Constructor */
     Node(T key, Node *left = nullptr, Node *right = nullptr, int height = 1)
         : key(key), height(height), left(left), right(right) {}
 };
