@@ -2,7 +2,9 @@
 
 ### Aluno
 - **Nome:** Antônio Joabe Alves Morais
-- **Matrícula:** 539029
+
+### Descrição
+
 
 ### Execução
 Para compilar o programa, basta executar o comando `make` na pasta raiz do projeto.
